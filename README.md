@@ -1,1 +1,1 @@
-"# reCAPTCHA" 
+![Build status](https://travis-ci.org/PaulMiami/reCAPTCHA.svg?branch=master)
