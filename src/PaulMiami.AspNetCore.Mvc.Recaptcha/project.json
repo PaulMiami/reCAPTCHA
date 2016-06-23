@@ -1,0 +1,22 @@
+﻿{
+  "version": "0.1.0-*",
+  "title": "AspNet Core reCAPTCHA",
+  "authors": [ "Paul Biccherai" ],
+  "packOptions": {
+    "summary": "This is a helper library for google reCAPTCHA 2.0 (no captcha)",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/PaulMiami/reCAPTCHA"
+    }
+  },
+
+  "dependencies": {
+    "NETStandard.Library": "1.5.0-rc2-24027"
+  },
+
+  "frameworks": {
+    "netstandard1.5": {
+      "imports": "dnxcore50"
+    }
+  }
+}
