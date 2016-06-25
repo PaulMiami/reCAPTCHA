@@ -6,12 +6,12 @@
   },
 
   "dependencies": {
-    "dotnet-test-xunit": "1.0.0-*",
+    "dotnet-test-xunit": "1.0.0-rc2-*",
     "Microsoft.NETCore.App": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-rc2-3002702",
       "type": "platform"
     },
-    "xunit": "2.1.0-*",
+    "xunit": "2.1.0-rc2-*",
     "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project"}
   },
 
@@ -29,13 +29,5 @@
 
   "tooling": {
     "defaultNamespace": "PaulMiami.AspNetCore.Mvc.Recaptcha.Test"
-  },
-
-  "tools": {
-    "Microsoft.DotNet.Watcher.Tools": {
-      "version": "1.0.0-*",
-      "imports": "portable-net45+win8+dnxcore50"
-    }
   }
-
 }
