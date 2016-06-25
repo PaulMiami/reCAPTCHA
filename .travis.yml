@@ -8,6 +8,11 @@ before_install:
   - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
   - sudo apt-get update
   - sudo apt-get -y install dotnet-dev-1.0.0-preview2-003091
+  - dotnet --info
+
+install:
+  - dotnet restore
+  - dotnet build src/PaulMiami.AspNetCore.Mvc.Recaptcha/project.json
 
 script:
-  - dotnet --info
+  - dotnet test test/PaulMiami.AspNetCore.Mvc.Recaptcha.Test/project.json
