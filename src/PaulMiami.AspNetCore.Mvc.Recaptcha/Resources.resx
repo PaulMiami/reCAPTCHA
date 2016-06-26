@@ -120,4 +120,22 @@
   <data name="Exception_OptionMustBeProvided" xml:space="preserve">
     <value>The '{0}' option must be provided.</value>
   </data>
+  <data name="Log_ValidationException" xml:space="preserve">
+    <value>Recaptcha validation failed. {Message}</value>
+  </data>
+  <data name="ValidateError_InvalidInputResponse" xml:space="preserve">
+    <value>The response parameter is invalid or malformed.</value>
+  </data>
+  <data name="ValidateError_InvalidInputSecret" xml:space="preserve">
+    <value>The secret parameter is invalid or malformed.</value>
+  </data>
+  <data name="ValidateError_MissingInputResponse" xml:space="preserve">
+    <value>The response parameter is missing.</value>
+  </data>
+  <data name="ValidateError_MissingInputSecret" xml:space="preserve">
+    <value>The secret parameter is missing.</value>
+  </data>
+  <data name="ValidateError_Unknown" xml:space="preserve">
+    <value>Unknown error '{0}'.</value>
+  </data>
 </root>

@@ -5,7 +5,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
@@ -13,11 +13,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
     public class ValidateRecaptchaFilter : IAsyncAuthorizationFilter
     {
         private RecaptchaService _service;
+        private ILogger<ValidateRecaptchaFilter> _logger;
 
-        public ValidateRecaptchaFilter(RecaptchaService service)
+        public ValidateRecaptchaFilter(RecaptchaService service, ILogger<ValidateRecaptchaFilter> logger)
         {
             service.CheckArgumentNull(nameof(service));
+            logger.CheckArgumentNull(nameof(logger));
+
             _service = service;
+            _logger = logger;
         }
 
         /// <inheritdoc />
@@ -34,9 +38,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             {
                 await _service.ValidateResponseAsync(response, remoteIp);
             }
-            catch (Exception)
+            catch (RecaptchaValidationException ex)
             {
-                // log ex
+                _logger.ValidationException(ex.Message, ex);
                 context.Result = new BadRequestResult();
             }
         }

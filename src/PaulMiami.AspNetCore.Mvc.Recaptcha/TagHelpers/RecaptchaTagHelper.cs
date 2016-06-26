@@ -6,7 +6,7 @@
 using System;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace PaulMiami.AspNetCore.Mvc.Recaptcha
+namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 {
     public class RecaptchaTagHelper : TagHelper
     {

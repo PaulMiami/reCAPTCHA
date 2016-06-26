@@ -1,4 +1,4 @@
-# [Google reCAPTCHA 2.0](https://developers.google.com/recaptcha) integration for ASPNET Core
+# [Google reCAPTCHA 2.0](https://developers.google.com/recaptcha) for ASPNET Core
 
 | Builds   | |
 | -------- | --- |

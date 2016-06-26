@@ -42,6 +42,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         }
 
         [Fact]
+        public void MissingOptionJavaScriptUrl()
+        {
+            var options = GetOptions();
+            options.Value.JavaScriptUrl = null;
+
+            var ex = Assert.Throws<ArgumentException>(() => new RecaptchaService(options));
+            Assert.Equal("The 'JavaScriptUrl' option must be provided.", ex.Message);
+        }
+
+        [Fact]
         public void MissingOptionSecretKey()
         {
             var options = GetOptions();
@@ -62,11 +72,23 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         }
 
         [Fact]
+        public void GetJavaScriptUrlSuccess()
+        {
+            var options = GetOptions();
+
+            var service = new RecaptchaService(options);
+
+            Assert.Equal(options.Value.JavaScriptUrl, service.GetJavaScriptUrl());
+        }
+
+        [Fact]
         public void GetSiteKeySuccess()
         {
-            var service = new RecaptchaService(GetOptions());
+            var options = GetOptions();
 
-            Assert.Equal(_siteKey, service.GetSiteKey());
+            var service = new RecaptchaService(options);
+
+            Assert.Equal(options.Value.SiteKey, service.GetSiteKey());
         }
     }
 }

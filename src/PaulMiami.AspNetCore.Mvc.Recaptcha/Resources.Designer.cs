@@ -67,5 +67,59 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha {
                 return ResourceManager.GetString("Exception_OptionMustBeProvided", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Recaptcha validation failed. {Message}.
+        /// </summary>
+        public static string Log_ValidationException {
+            get {
+                return ResourceManager.GetString("Log_ValidationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to The response parameter is invalid or malformed..
+        /// </summary>
+        public static string ValidateError_InvalidInputResponse {
+            get {
+                return ResourceManager.GetString("ValidateError_InvalidInputResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to The secret parameter is invalid or malformed..
+        /// </summary>
+        public static string ValidateError_InvalidInputSecret {
+            get {
+                return ResourceManager.GetString("ValidateError_InvalidInputSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to The response parameter is missing..
+        /// </summary>
+        public static string ValidateError_MissingInputResponse {
+            get {
+                return ResourceManager.GetString("ValidateError_MissingInputResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to The secret parameter is missing..
+        /// </summary>
+        public static string ValidateError_MissingInputSecret {
+            get {
+                return ResourceManager.GetString("ValidateError_MissingInputSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Unknown error &apos;{0}&apos;..
+        /// </summary>
+        public static string ValidateError_Unknown {
+            get {
+                return ResourceManager.GetString("ValidateError_Unknown", resourceCulture);
+            }
+        }
     }
 }

@@ -15,4 +15,5 @@ install:
   - dotnet build src/PaulMiami.AspNetCore.Mvc.Recaptcha/project.json
 
 script:
+  - dotnet build sample/TestWebApp/project.json
   - dotnet test test/PaulMiami.AspNetCore.Mvc.Recaptcha.Test/project.json

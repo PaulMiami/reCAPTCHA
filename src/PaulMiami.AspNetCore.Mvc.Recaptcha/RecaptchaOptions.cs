@@ -11,9 +11,12 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         public RecaptchaOptions()
         {
             ResponseValidationEndpoint = RecaptchaDefaults.ResponseValidationEndpoint;
+            JavaScriptUrl = RecaptchaDefaults.JavaScriptUrl;
         }
 
         public string ResponseValidationEndpoint { get; set; }
+
+        public string JavaScriptUrl { get; set; }
 
         public string SiteKey { get; set; }
 
