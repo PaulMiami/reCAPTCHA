@@ -1,0 +1,24 @@
+{
+  "name": "TestWebApp",
+  "homepage": "https://github.com/PaulMiami/reCAPTCHA",
+  "authors": [
+    "Paul Biccherai <pbiccherai@hotmail.com>"
+  ],
+  "description": "Test web app",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "jquery": "2.2.0",
+    "jquery-validation": "1.14.0",
+    "jquery-validation-unobtrusive": "3.2.6"
+  }
+}
