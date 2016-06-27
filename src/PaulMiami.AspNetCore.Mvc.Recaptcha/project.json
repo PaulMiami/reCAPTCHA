@@ -1,9 +1,11 @@
 ﻿{
-  "version": "1.0.0-dev",
+  "version": "1.0.0-beta1",
   "title": "reCAPTCHA 2.0 for ASPNET Core ",
   "authors": [ "Paul Biccherai" ],
   "packOptions": {
     "summary": "This is a helper library for google reCAPTCHA 2.0",
+    "projectUrl": "https://github.com/PaulMiami/reCAPTCHA",
+    "tags": [ "aspnetcore", "recaptcha", "captcha" ],
     "repository": {
       "type": "git",
       "url": "https://github.com/PaulMiami/reCAPTCHA"
