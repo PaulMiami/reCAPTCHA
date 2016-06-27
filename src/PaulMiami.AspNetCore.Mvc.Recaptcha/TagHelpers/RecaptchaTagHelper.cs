@@ -12,6 +12,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
     {
         private RecaptchaService _service;
 
+        internal const string RecaptchaValidationJSCallBack = "recaptchaValidated";
+
         public RecaptchaTagHelper(RecaptchaService service)
         {
             if (service == null)
@@ -26,6 +28,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.Add("class", "g-recaptcha");
             output.Attributes.Add("data-sitekey", _service.GetSiteKey());
+            output.Attributes.Add("data-callback", RecaptchaValidationJSCallBack);
         }
     }
 }

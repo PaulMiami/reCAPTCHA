@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TestWebApp.Models.TestEmailNewsletterSignup;
 
 namespace TestWebApp.Controllers

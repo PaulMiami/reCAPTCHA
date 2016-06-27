@@ -6,13 +6,13 @@
   },
 
   "dependencies": {
-    "dotnet-test-xunit": "1.0.0-rc2-*",
+    "dotnet-test-xunit": "1.0.0-*",
     "Microsoft.NETCore.App": {
-      "version": "1.0.0-rc2-3002702",
+      "version": "1.0.0",
       "type": "platform"
     },
-    "xunit": "2.1.0-rc2-*",
-    "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project"}
+    "xunit": "2.1.0",
+    "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project" }
   },
 
   "frameworks": {

@@ -42,6 +42,11 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             return _options.JavaScriptUrl;
         }
 
+        public string GetValidationMessage()
+        {
+            return Resources.Default_ValidationMessage;
+        }
+
         public async Task ValidateResponseAsync(string response, string remoteIp)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, RecaptchaDefaults.ResponseValidationEndpoint);

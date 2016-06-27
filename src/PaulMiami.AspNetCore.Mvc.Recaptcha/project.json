@@ -1,6 +1,6 @@
 ﻿{
-  "version": "1.0.0-beta-6",
-  "title": "AspNet Core reCAPTCHA",
+  "version": "1.0.0-dev",
+  "title": "reCAPTCHA 2.0 for ASPNET Core ",
   "authors": [ "Paul Biccherai" ],
   "packOptions": {
     "summary": "This is a helper library for google reCAPTCHA 2.0",
@@ -9,19 +9,20 @@
       "url": "https://github.com/PaulMiami/reCAPTCHA"
     }
   },
-
+  "buildOptions": {
+    "warningsAsErrors": true
+  },
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0-*",
-    "Microsoft.AspNetCore.Mvc.Core": "1.0.0-*",
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0-*",
-    "Microsoft.AspNetCore.Razor.Runtime": "1.0.0-*",
-    "NETStandard.Library": "1.5.0-*",
-    "Newtonsoft.Json": "8.0.3"
+    "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
+    "Microsoft.AspNetCore.Razor.Runtime": "1.0.0",
+    "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {
-    "netstandard1.5": {
-      "imports": "dnxcore50"
-    }
+    "net451": {},
+    "netstandard1.6": {}
   }
 }

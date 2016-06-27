@@ -60,6 +60,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to Validate that you are not a robot..
+        /// </summary>
+        public static string Default_ValidationMessage {
+            get {
+                return ResourceManager.GetString("Default_ValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to The &apos;{0}&apos; option must be provided..
         /// </summary>
         public static string Exception_OptionMustBeProvided {
