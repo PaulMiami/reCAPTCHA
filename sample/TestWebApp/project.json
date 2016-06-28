@@ -10,14 +10,14 @@
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Razor.Tools": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-preview2-final",
       "type": "build"
     },
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-    "Microsoft.Extensions.Logging": "1.0.0-*",
+    "Microsoft.Extensions.Logging": "1.0.0",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project" }
@@ -26,19 +26,19 @@
   "tools": {
 
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-preview2-final",
       "imports": "portable-net45+win8+dnxcore50"
     },
     "Microsoft.AspNetCore.Razor.Tools": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-preview2-final",
       "imports": "portable-net45+win8+dnxcore50"
     },
     "Microsoft.Extensions.SecretManager.Tools": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-preview2-final",
       "imports": "portable-net45+win8+dnxcore50"
     },
     "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
-      "version": "1.0.0-*",
+      "version": "1.0.0-preview2-final",
       "imports": [
         "portable-net45+win8+dnxcore50",
         "portable-net45+win8"
