@@ -57,6 +57,48 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         }
 
         [Theory]
+        [InlineData("POST")]
+        [InlineData("post")]
+        public async Task TestPostFail(string httpMethod)
+        {
+            var recaptchaResponse = Guid.NewGuid().ToString();
+            var ipAddress = new IPAddress(new byte[] { 127, 0, 0, 1 });
+            var errorMessage = Guid.NewGuid().ToString();
+
+            var recaptchaService = new Mock<IRecaptchaValidationService>(MockBehavior.Strict);
+            recaptchaService
+                .Setup(a => a.ValidateResponseAsync(recaptchaResponse, ipAddress.ToString()))
+                .Throws(new RecaptchaValidationException(errorMessage))
+                .Verifiable();
+
+            var sink = new TestSink();
+            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, loggerFactory);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Method = httpMethod;
+            httpContext.Request.HttpContext.Connection.RemoteIpAddress = ipAddress;
+            httpContext.Request.ContentType = "application/x-www-form-urlencoded";
+            httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                { "g-recaptcha-response", recaptchaResponse }
+            });
+
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+
+            var context = new AuthorizationFilterContext(actionContext, new[] { filter });
+
+            await filter.OnAuthorizationAsync(context);
+
+            recaptchaService.Verify();
+
+            Assert.Empty(sink.Scopes);
+            Assert.Single(sink.Writes);
+            Assert.Equal($"Recaptcha validation failed. {errorMessage}", sink.Writes[0].State?.ToString());
+        }
+
+        [Theory]
         [InlineData("GET")]
         [InlineData("PUT")]
         [InlineData("DELETE")]

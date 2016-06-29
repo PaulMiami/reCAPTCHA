@@ -32,7 +32,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         public void MissingOptions()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new RecaptchaService(null));
-            Assert.Equal("options", ex.ParamName);
             
         }
 
@@ -138,7 +137,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         [InlineData("invalid-input-secret", "The secret parameter is invalid or malformed.")]
         [InlineData("missing-input-response", "The response parameter is missing.")]
         [InlineData("invalid-input-response", "The response parameter is invalid or malformed.")]
-        public async Task ValidateMissingSecret(string serviceErrorCode, string exceptionMessage)
+        [InlineData("new error code never seen before", "Unknown error 'new error code never seen before'.")]
+        public async Task ValidateServerErrors(string serviceErrorCode, string exceptionMessage)
         {
             var captchaResponse = Guid.NewGuid().ToString();
             var ipAddress = Guid.NewGuid().ToString();
@@ -148,6 +148,19 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             var ex = await Assert.ThrowsAsync<RecaptchaValidationException>(async () => await service.ValidateResponseAsync(captchaResponse, ipAddress));
             Assert.Equal(exceptionMessage, ex.Message);
+        }
+
+        [Fact]
+        public async Task ValidateServerErrorNoDescription()
+        {
+            var captchaResponse = Guid.NewGuid().ToString();
+            var ipAddress = Guid.NewGuid().ToString();
+
+            var service = CreateTestService(System.Net.HttpStatusCode.OK,
+                new RecaptchaValidationResponse { Success = false, ErrorCodes = null }, captchaResponse, ipAddress );
+
+            var ex = await Assert.ThrowsAsync<RecaptchaValidationException>(async () => await service.ValidateResponseAsync(captchaResponse, ipAddress));
+            Assert.Equal("Unspecified remote server error.", ex.Message);
         }
     }
 }

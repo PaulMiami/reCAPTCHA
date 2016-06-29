@@ -120,6 +120,10 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
                     }
                 }
             }
+            else
+            {
+                return Resources.ValidateError_UnspecifiedRemoteServerError;
+            }
 
             return string.Join(Environment.NewLine, errorList);
         }

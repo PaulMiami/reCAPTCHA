@@ -233,3 +233,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# OpenCover and ReportGenerator
+coverage.xml
+Report/

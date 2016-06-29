@@ -141,4 +141,7 @@
   <data name="ValidateError_Unknown" xml:space="preserve">
     <value>Unknown error '{0}'.</value>
   </data>
+  <data name="ValidateError_UnspecifiedRemoteServerError" xml:space="preserve">
+    <value>Unspecified remote server error.</value>
+  </data>
 </root>

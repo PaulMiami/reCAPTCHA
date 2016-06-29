@@ -20,8 +20,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         public RecaptchaScriptTagHelper(RecaptchaService service)
         {
-            if (service == null)
-                throw new ArgumentNullException(nameof(service));
+            service.CheckArgumentNull(nameof(service));
 
             _service = service;
         }
@@ -30,7 +29,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
         public bool? JqueryValidation { get; set; }
 
         [HtmlAttributeName(ValidationMessageElementIdAttributeName)]
-        public string ValidationMessageElementID { get; set; }
+        public string ValidationMessageElementId { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -45,7 +44,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
                 var script = new TagBuilder("script");
                 script.TagRenderMode = TagRenderMode.Normal;
                 script.InnerHtml.AppendHtml(string.Format(_scriptSnippet,
-                    RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementID, _service.ValidationMessage));
+                    RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementId, _service.ValidationMessage));
 
                 output.PostElement.AppendHtml(script);
             }

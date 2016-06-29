@@ -130,5 +130,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha {
                 return ResourceManager.GetString("ValidateError_Unknown", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Unspecified remote server error..
+        /// </summary>
+        public static string ValidateError_UnspecifiedRemoteServerError {
+            get {
+                return ResourceManager.GetString("ValidateError_UnspecifiedRemoteServerError", resourceCulture);
+            }
+        }
     }
 }

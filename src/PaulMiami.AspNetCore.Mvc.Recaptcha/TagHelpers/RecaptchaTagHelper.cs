@@ -33,8 +33,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         public RecaptchaTagHelper(RecaptchaService service)
         {
-            if (service == null)
-                throw new ArgumentNullException(nameof(service));
+            service.CheckArgumentNull(nameof(service));
 
             _service = service;
         }
