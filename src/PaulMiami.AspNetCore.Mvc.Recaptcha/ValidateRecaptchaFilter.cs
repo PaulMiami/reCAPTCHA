@@ -6,22 +6,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
     public class ValidateRecaptchaFilter : IAsyncAuthorizationFilter
     {
-        private RecaptchaService _service;
+        private IRecaptchaValidationService _service;
         private ILogger<ValidateRecaptchaFilter> _logger;
 
-        public ValidateRecaptchaFilter(RecaptchaService service, ILogger<ValidateRecaptchaFilter> logger)
+        public ValidateRecaptchaFilter(IRecaptchaValidationService service, ILoggerFactory loggerFactory)
         {
             service.CheckArgumentNull(nameof(service));
-            logger.CheckArgumentNull(nameof(logger));
+            loggerFactory.CheckArgumentNull(nameof(loggerFactory));
 
             _service = service;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<ValidateRecaptchaFilter>();
         }
 
         /// <inheritdoc />
@@ -30,19 +31,27 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             context.CheckArgumentNull(nameof(context));
             context.HttpContext.CheckArgumentNull(nameof(context.HttpContext));
 
-            var form = await context.HttpContext.Request.ReadFormAsync();
-            var response = form["g-recaptcha-response"];
-            var remoteIp = context.HttpContext.Connection?.RemoteIpAddress?.ToString();
+            if (ShouldValidate(context))
+            {
+                var form = await context.HttpContext.Request.ReadFormAsync();
+                var response = form["g-recaptcha-response"];
+                var remoteIp = context.HttpContext.Connection?.RemoteIpAddress?.ToString();
 
-            try
-            {
-                await _service.ValidateResponseAsync(response, remoteIp);
+                try
+                {
+                    await _service.ValidateResponseAsync(response, remoteIp);
+                }
+                catch (RecaptchaValidationException ex)
+                {
+                    _logger.ValidationException(ex.Message, ex);
+                    context.Result = new BadRequestResult();
+                }
             }
-            catch (RecaptchaValidationException ex)
-            {
-                _logger.ValidationException(ex.Message, ex);
-                context.Result = new BadRequestResult();
-            }
+        }
+
+        protected  bool ShouldValidate(AuthorizationFilterContext context)
+        {
+            return string.Equals("POST", context.HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

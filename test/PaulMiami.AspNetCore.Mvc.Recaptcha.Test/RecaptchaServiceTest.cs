@@ -4,7 +4,12 @@
 #endregion
 
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
@@ -78,7 +83,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             var service = new RecaptchaService(options);
 
-            Assert.Equal(options.Value.JavaScriptUrl, service.GetJavaScriptUrl());
+            Assert.Equal(options.Value.JavaScriptUrl, service.JavaScriptUrl);
         }
 
         [Fact]
@@ -88,7 +93,61 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             var service = new RecaptchaService(options);
 
-            Assert.Equal(options.Value.SiteKey, service.GetSiteKey());
+            Assert.Equal(options.Value.SiteKey, service.SiteKey);
+        }
+
+        private RecaptchaService CreateTestService(System.Net.HttpStatusCode statusCode, RecaptchaValidationResponse result, string reponse, string ipAddress)
+        {
+            var options = GetOptions();
+            options.Value.BackchannelHttpHandler = new TestHttpMessageHandler
+            {
+                Sender = async req =>
+                {
+                    var content = await req.Content.ReadAsStringAsync();
+                    Assert.Equal($"secret={_secretKey}&response={reponse}&remoteip={ipAddress}", content);
+
+                    if (req.RequestUri.AbsoluteUri == "https://www.google.com/recaptcha/api/siteverify")
+                    {
+                        var res = new HttpResponseMessage(statusCode);
+                        var text = JsonConvert.SerializeObject(result);
+                        res.Content = new StringContent(text, Encoding.UTF8, "application/json");
+                        return res;
+                    }
+
+                    throw new NotImplementedException(req.RequestUri.AbsoluteUri);
+                }
+            };
+
+            return new RecaptchaService(options);
+        }
+
+        [Fact]
+        public async Task ValidateSuccess()
+        {
+            var captchaResponse = Guid.NewGuid().ToString();
+            var ipAddress = Guid.NewGuid().ToString();
+
+            var service = CreateTestService(System.Net.HttpStatusCode.OK, 
+                new RecaptchaValidationResponse { Success =true}, captchaResponse, ipAddress);
+
+            await service.ValidateResponseAsync(captchaResponse, ipAddress);
+        }
+
+        [Theory]
+        [InlineData("missing-input-secret", "The secret parameter is missing.")]
+        [InlineData("invalid-input-secret", "The secret parameter is invalid or malformed.")]
+        [InlineData("missing-input-response", "The response parameter is missing.")]
+        [InlineData("invalid-input-response", "The response parameter is invalid or malformed.")]
+        public async Task ValidateMissingSecret(string serviceErrorCode, string exceptionMessage)
+        {
+            var captchaResponse = Guid.NewGuid().ToString();
+            var ipAddress = Guid.NewGuid().ToString();
+
+            var service = CreateTestService(System.Net.HttpStatusCode.OK, 
+                new RecaptchaValidationResponse { Success = false, ErrorCodes=new List<string> { serviceErrorCode } }, captchaResponse, ipAddress);
+
+            var ex = await Assert.ThrowsAsync<RecaptchaValidationException>(async () => await service.ValidateResponseAsync(captchaResponse, ipAddress));
+            Assert.Equal(exceptionMessage, ex.Message);
         }
     }
 }

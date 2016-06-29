@@ -13,9 +13,12 @@ using System;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
-    public class RecaptchaService
+    public class RecaptchaService : IRecaptchaValidationService
     {
         private RecaptchaOptions _options;
+        private HttpClient _backChannel;
+        private RecaptchaControlSettings _controlSettings;
+        private string _validationMessage;
 
         public RecaptchaService(IOptions<RecaptchaOptions> options)
         {
@@ -30,21 +33,43 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             _options.SiteKey.CheckMandatoryOption(nameof(_options.SiteKey));
 
             _options.SecretKey.CheckMandatoryOption(nameof(_options.SecretKey));
+
+            _controlSettings = _options.ControlSettings ?? new RecaptchaControlSettings();
+            _validationMessage = _options.ValidationMessage ?? Resources.Default_ValidationMessage;
+            _backChannel = new HttpClient(_options.BackchannelHttpHandler ?? new HttpClientHandler());
+            _backChannel.Timeout = _options.BackchannelTimeout;
         }
 
-        public string GetSiteKey()
+        public string SiteKey
         {
-            return _options.SiteKey;
+            get
+            {
+                return _options.SiteKey;
+            }
         }
 
-        public string GetJavaScriptUrl()
+        public string JavaScriptUrl
         {
-            return _options.JavaScriptUrl;
+            get
+            {
+                return _options.JavaScriptUrl;
+            }
         }
 
-        public string GetValidationMessage()
+        public string ValidationMessage
         {
-            return Resources.Default_ValidationMessage;
+            get
+            {
+                return _validationMessage;
+            }
+        }
+     
+        public RecaptchaControlSettings ControlSettings
+        {
+            get
+            {
+                return _controlSettings;
+            }
         }
 
         public async Task ValidateResponseAsync(string response, string remoteIp)
@@ -56,9 +81,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             paramaters["remoteip"] = remoteIp;
             request.Content = new FormUrlEncodedContent(paramaters);
 
-            HttpClient backchannel = new HttpClient();
-
-            var resp = await backchannel.SendAsync(request);
+            var resp = await _backChannel.SendAsync(request);
+            resp.EnsureSuccessStatusCode();
 
             var responseText = await resp.Content.ReadAsStringAsync();
 

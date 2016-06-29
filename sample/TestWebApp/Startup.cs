@@ -31,7 +31,13 @@ namespace TestWebApp
             services.AddRecaptcha(new RecaptchaOptions
             {
                 SiteKey = Configuration["Recaptcha:SiteKey"],
-                SecretKey = Configuration["Recaptcha:SecretKey"]
+                SecretKey = Configuration["Recaptcha:SecretKey"],
+                ControlSettings = new RecaptchaControlSettings
+                {
+                    //Size = RecaptchaSize.Compact,
+                    //Theme = RecaptchaTheme.Dark
+                },
+                ValidationMessage = "Are you a robot?"
             });
         }
         

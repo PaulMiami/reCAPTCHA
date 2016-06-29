@@ -36,7 +36,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
         {
             output.TagName = "script";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.Add("src", _service.GetJavaScriptUrl());
+            output.Attributes.Add("src", _service.JavaScriptUrl);
             output.Attributes.Add("async", string.Empty);
             output.Attributes.Add("defer", string.Empty);
 
@@ -45,9 +45,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
                 var script = new TagBuilder("script");
                 script.TagRenderMode = TagRenderMode.Normal;
                 script.InnerHtml.AppendHtml(string.Format(_scriptSnippet,
-                    RecaptchaTagHelper.RecaptchaValidationJSCallBack,
-                    ValidationMessageElementID,
-                    _service.GetValidationMessage()));
+                    RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementID, _service.ValidationMessage));
 
                 output.PostElement.AppendHtml(script);
             }
