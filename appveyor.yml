@@ -16,6 +16,8 @@ install:
     & .\dotnet-install.ps1 -Channel "preview" -Version "1.0.0-preview2-003121" -InstallDir "$env:DOTNET_INSTALL_DIR"
 
     dotnet restore
+
+    nuget restore packages.config -PackagesDirectory packages
     
     dotnet build .\src\PaulMiami.AspNetCore.Mvc.Recaptcha\project.json
 build: off
