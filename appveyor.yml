@@ -4,7 +4,7 @@ os: Visual Studio 2015
 configuration: Debug
 environment:
   COVERALLS_REPO_TOKEN:
-    secure: 2dmh2VJ03gVk7wNGYBupovGOEGAf4Wn09
+    secure: 4qvxo9ONx36nPuf2u7V0J9E+l55g6gU6t1p2xp7Az04mhYv5sGeaSddllhqMFogk
 install:
 - ps: >-
     nuget update -self
