@@ -33,9 +33,18 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 
             if (ShouldValidate(context))
             {
+                var formField = "g-recaptcha-response";
                 var form = await context.HttpContext.Request.ReadFormAsync();
-                var response = form["g-recaptcha-response"];
+                var response = form[formField];
                 var remoteIp = context.HttpContext.Connection?.RemoteIpAddress?.ToString();
+
+                Action invalidResponse = ()=> context.ModelState.AddModelError(formField, _service.ValidationMessage);
+
+                if (string.IsNullOrEmpty(response))
+                {
+                    invalidResponse();
+                    return;
+                }
 
                 try
                 {
@@ -44,7 +53,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
                 catch (RecaptchaValidationException ex)
                 {
                     _logger.ValidationException(ex.Message, ex);
-                    context.Result = new BadRequestResult();
+
+                    if (ex.InvalidResponse)
+                    {
+                        invalidResponse();
+                        return;
+                    }
+                    else
+                    {
+                        context.Result = new BadRequestResult();
+                    }
                 }
             }
         }

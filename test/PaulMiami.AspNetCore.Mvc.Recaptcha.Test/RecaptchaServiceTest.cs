@@ -133,12 +133,12 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         }
 
         [Theory]
-        [InlineData("missing-input-secret", "The secret parameter is missing.")]
-        [InlineData("invalid-input-secret", "The secret parameter is invalid or malformed.")]
-        [InlineData("missing-input-response", "The response parameter is missing.")]
-        [InlineData("invalid-input-response", "The response parameter is invalid or malformed.")]
-        [InlineData("new error code never seen before", "Unknown error 'new error code never seen before'.")]
-        public async Task ValidateServerErrors(string serviceErrorCode, string exceptionMessage)
+        [InlineData("missing-input-secret", "The secret parameter is missing.", false)]
+        [InlineData("invalid-input-secret", "The secret parameter is invalid or malformed.", false)]
+        [InlineData("missing-input-response", "The response parameter is missing.", true)]
+        [InlineData("invalid-input-response", "The response parameter is invalid or malformed.", true)]
+        [InlineData("new error code never seen before", "Unknown error 'new error code never seen before'.", false)]
+        public async Task ValidateServerErrors(string serviceErrorCode, string exceptionMessage, bool expectedInvalidResponse)
         {
             var captchaResponse = Guid.NewGuid().ToString();
             var ipAddress = Guid.NewGuid().ToString();
@@ -148,6 +148,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             var ex = await Assert.ThrowsAsync<RecaptchaValidationException>(async () => await service.ValidateResponseAsync(captchaResponse, ipAddress));
             Assert.Equal(exceptionMessage, ex.Message);
+            Assert.Equal(expectedInvalidResponse, ex.InvalidResponse);
         }
 
         [Fact]
@@ -161,6 +162,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             var ex = await Assert.ThrowsAsync<RecaptchaValidationException>(async () => await service.ValidateResponseAsync(captchaResponse, ipAddress));
             Assert.Equal("Unspecified remote server error.", ex.Message);
+            Assert.False(ex.InvalidResponse);
         }
     }
 }

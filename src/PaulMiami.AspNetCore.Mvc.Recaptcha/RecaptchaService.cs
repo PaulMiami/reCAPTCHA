@@ -89,12 +89,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             var validationResponse = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RecaptchaValidationResponse>(responseText));
 
             if (!validationResponse.Success)
-                throw new RecaptchaValidationException(GetErrrorMessage(validationResponse));
+            {
+                bool invalidResponse;
+                throw new RecaptchaValidationException(GetErrrorMessage(validationResponse, out invalidResponse), invalidResponse);
+            }
         }
 
-        private string GetErrrorMessage(RecaptchaValidationResponse validationResponse)
+        private string GetErrrorMessage(RecaptchaValidationResponse validationResponse, out bool invalidResponse)
         {
             var errorList = new List<string>();
+            invalidResponse = false;
 
             if (validationResponse.ErrorCodes != null)
             {
@@ -110,9 +114,11 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
                             break;
                         case "missing-input-response":
                             errorList.Add(Resources.ValidateError_MissingInputResponse);
+                            invalidResponse = true;
                             break;
                         case "invalid-input-response":
                             errorList.Add(Resources.ValidateError_InvalidInputResponse);
+                            invalidResponse = true;
                             break;
                         default:
                             errorList.Add(string.Format(Resources.ValidateError_Unknown, error));

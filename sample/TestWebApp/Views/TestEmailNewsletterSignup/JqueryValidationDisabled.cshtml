@@ -5,7 +5,7 @@
 @using PaulMiami.AspNetCore.Mvc.Recaptcha
 
 
-<form asp-controller="TestEmailNewsletterSignup" asp-action="Index" method="post" class="form-horizontal">
+<form asp-controller="TestEmailNewsletterSignup" asp-action="JqueryValidationDisabled" method="post" class="form-horizontal">
     <h4>@ViewBag.Title</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -26,7 +26,6 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <recaptcha />
-            <span class="text-danger" id="recaptchaErrorMessage"></span>
         </div>
     </div>
     <div class="form-group">
@@ -37,5 +36,5 @@
 </form>
 
 @section Scripts {
-    <recaptcha-script validation-message-element-id="recaptchaErrorMessage" />
+    <recaptcha-script jquery-validation="false" />
 }

@@ -10,5 +10,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
     public interface IRecaptchaValidationService
     {
         Task ValidateResponseAsync(string response, string remoteIp);
+
+        string ValidationMessage { get; }
     }
 }

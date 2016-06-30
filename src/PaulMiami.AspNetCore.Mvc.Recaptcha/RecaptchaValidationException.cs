@@ -9,9 +9,11 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
     public class RecaptchaValidationException : Exception
     {
-        public RecaptchaValidationException(string message):base(message)
-        {
+        public bool InvalidResponse { get; }
 
+        public RecaptchaValidationException(string message, bool invalidResponse):base(message)
+        {
+            InvalidResponse = invalidResponse;
         }
     }
 }
