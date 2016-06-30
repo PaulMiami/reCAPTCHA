@@ -8,11 +8,15 @@ environment:
 install:
 - ps: >-
     nuget update -self
+
     Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1" -OutFile ".\dotnet-install.ps1"
+
     $env:DOTNET_INSTALL_DIR = "$pwd\.dotnetcli"
+
     & .\dotnet-install.ps1 -Channel "preview" -Version "1.0.0-preview2-003121" -InstallDir "$env:DOTNET_INSTALL_DIR"
-    nuget restore packages.config -PackagesDirectory packages
+
     dotnet restore
+    
     dotnet build .\src\PaulMiami.AspNetCore.Mvc.Recaptcha\project.json
 build: off
 test_script:
