@@ -64,6 +64,43 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         [Theory]
         [InlineData("POST")]
         [InlineData("post")]
+        public async Task TestPostSucessNoIp(string httpMethod)
+        {
+            var recaptchaResponse = Guid.NewGuid().ToString();
+
+            var recaptchaService = new Mock<IRecaptchaValidationService>(MockBehavior.Strict);
+            recaptchaService
+                .Setup(a => a.ValidateResponseAsync(recaptchaResponse, null))
+                .Returns(Task.FromResult(0))
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, NullLoggerFactory.Instance);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Method = httpMethod;
+            httpContext.Request.HttpContext.Connection.RemoteIpAddress = null;
+            httpContext.Request.ContentType = "application/x-www-form-urlencoded";
+            httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                { "g-recaptcha-response", recaptchaResponse }
+            });
+
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+
+            var context = new AuthorizationFilterContext(actionContext, new[] { filter });
+
+            await filter.OnAuthorizationAsync(context);
+
+            recaptchaService.Verify();
+
+            Assert.Null(context.Result);
+            Assert.True(context.ModelState.IsValid);
+            Assert.Empty(context.ModelState);
+        }
+
+        [Theory]
+        [InlineData("POST")]
+        [InlineData("post")]
         public async Task TestPostFail(string httpMethod)
         {
             var recaptchaResponse = Guid.NewGuid().ToString();
@@ -159,6 +196,42 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.NotNull(context.ModelState["g-recaptcha-response"]);
             Assert.Equal(1, context.ModelState["g-recaptcha-response"].Errors.Count);
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
+        }
+
+        [Theory]
+        [InlineData("POST")]
+        [InlineData("post")]
+        public async Task TestPostWrongContentType(string httpMethod)
+        {
+            var recaptchaService = new Mock<IRecaptchaValidationService>(MockBehavior.Strict);
+            recaptchaService
+                .Setup(a => a.ValidateResponseAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .Verifiable();
+
+            var sink = new TestSink();
+            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, loggerFactory);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Method = httpMethod;
+            httpContext.Request.ContentType = "Wrong content type";
+
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+
+            var context = new AuthorizationFilterContext(actionContext, new[] { filter });
+
+            recaptchaService.Verify(a => a.ValidateResponseAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+
+            await filter.OnAuthorizationAsync(context);
+
+            Assert.Empty(sink.Scopes);
+            Assert.Single(sink.Writes);
+            Assert.Equal($"Recaptcha validation failed. The content type is 'Wrong content type', it should be form content.", sink.Writes[0].State?.ToString());
+            var httpBadRequest = Assert.IsType<BadRequestResult>(context.Result);
+            Assert.Equal(StatusCodes.Status400BadRequest, httpBadRequest.StatusCode);
+            Assert.True(context.ModelState.IsValid);
+            Assert.Empty(context.ModelState);
         }
 
         [Theory]

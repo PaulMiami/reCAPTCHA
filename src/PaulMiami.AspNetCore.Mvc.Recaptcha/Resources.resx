@@ -120,6 +120,9 @@
   <data name="Default_ValidationMessage" xml:space="preserve">
     <value>Validate that you are not a robot.</value>
   </data>
+  <data name="Exception_MissingFormContent" xml:space="preserve">
+    <value>The content type is '{0}', it should be form content.</value>
+  </data>
   <data name="Exception_OptionMustBeProvided" xml:space="preserve">
     <value>The '{0}' option must be provided.</value>
   </data>

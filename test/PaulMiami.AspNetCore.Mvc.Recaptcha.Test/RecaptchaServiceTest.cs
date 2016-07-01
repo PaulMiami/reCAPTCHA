@@ -95,6 +95,17 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.Equal(options.Value.SiteKey, service.SiteKey);
         }
 
+        [Fact]
+        public void EnForceDefaultControlSettings()
+        {
+            var options = GetOptions();
+            options.Value.ControlSettings = null;
+
+            var service = new RecaptchaService(options);
+
+            Assert.NotNull(service.ControlSettings);
+        }
+
         private RecaptchaService CreateTestService(System.Net.HttpStatusCode statusCode, RecaptchaValidationResponse result, string reponse, string ipAddress)
         {
             var options = GetOptions();

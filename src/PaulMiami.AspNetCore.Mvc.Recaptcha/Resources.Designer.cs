@@ -69,6 +69,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to The content type is &apos;{0}&apos;, it should be form content..
+        /// </summary>
+        public static string Exception_MissingFormContent {
+            get {
+                return ResourceManager.GetString("Exception_MissingFormContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to The &apos;{0}&apos; option must be provided..
         /// </summary>
         public static string Exception_OptionMustBeProvided {
