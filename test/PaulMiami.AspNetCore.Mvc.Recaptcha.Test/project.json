@@ -14,7 +14,7 @@
     "xunit": "2.1.0",
     "Microsoft.AspNetCore.TestHost": "1.0.0",
     "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project" },
-    "Microsoft.Extensions.Logging.Testing": "1.1.0-alpha1-21527",
+    "Microsoft.Extensions.Logging.Testing": "1.1.0-alpha1-21521",
     "TestSite":  {"target": "project"}
   },
 
