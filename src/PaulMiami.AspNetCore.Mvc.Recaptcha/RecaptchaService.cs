@@ -13,7 +13,7 @@ using System;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
-    public class RecaptchaService : IRecaptchaValidationService
+    public class RecaptchaService : IRecaptchaValidationService, IRecaptchaConfigurationService
     {
         private RecaptchaOptions _options;
         private HttpClient _backChannel;

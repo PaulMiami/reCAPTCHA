@@ -19,6 +19,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             services.TryAddSingleton(Options.Create(configureOptions));
             services.TryAddSingleton<RecaptchaService>();
             services.TryAddSingleton<IRecaptchaValidationService>((sp) => sp.GetRequiredService<RecaptchaService>());
+            services.TryAddSingleton<IRecaptchaConfigurationService>((sp) => sp.GetRequiredService<RecaptchaService>());
             services.TryAddSingleton<ValidateRecaptchaFilter>();
         }
 

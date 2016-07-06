@@ -11,14 +11,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 {
     public class RecaptchaScriptTagHelper : TagHelper
     {
-        private RecaptchaService _service;
+        private IRecaptchaConfigurationService _service;
 
         private const string _scriptSnippet = "var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}');return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});";
 
         private const string JqueryValidationAttributeName = "jquery-validation";
         private const string ValidationMessageElementIdAttributeName = "validation-message-element-id";
 
-        public RecaptchaScriptTagHelper(RecaptchaService service)
+        public RecaptchaScriptTagHelper(IRecaptchaConfigurationService service)
         {
             service.CheckArgumentNull(nameof(service));
 

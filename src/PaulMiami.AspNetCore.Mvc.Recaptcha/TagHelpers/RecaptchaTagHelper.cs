@@ -10,7 +10,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 {
     public class RecaptchaTagHelper : TagHelper
     {
-        private RecaptchaService _service;
+        private IRecaptchaConfigurationService _service;
 
         internal const string RecaptchaValidationJSCallBack = "recaptchaValidated";
 
@@ -31,7 +31,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
         [HtmlAttributeName(TabindexAttributeName)]
         public int TabIndex { get; set; }
 
-        public RecaptchaTagHelper(RecaptchaService service)
+        public RecaptchaTagHelper(IRecaptchaConfigurationService service)
         {
             service.CheckArgumentNull(nameof(service));
 

@@ -22,7 +22,10 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IOptions<RecaptchaOptions>)).Count() == 1);
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(RecaptchaService)).Count() == 1);
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IRecaptchaValidationService)).Count() == 1);
+            Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IRecaptchaConfigurationService)).Count() == 1);
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(ValidateRecaptchaFilter)).Count() == 1);
+
+            Assert.Equal(5, services.Count);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TestSite.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
+        [ValidateRecaptcha]
         public IActionResult Index()
         {
             return Content("HELLO");
