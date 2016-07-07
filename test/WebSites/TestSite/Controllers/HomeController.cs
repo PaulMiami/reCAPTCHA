@@ -28,5 +28,10 @@ namespace TestSite.Controllers
 
             return Content("FAIL");
         }
+
+        public IActionResult RenderControl()
+        {
+            return View();
+        }
     }
 }

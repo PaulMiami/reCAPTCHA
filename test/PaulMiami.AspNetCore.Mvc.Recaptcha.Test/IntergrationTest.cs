@@ -82,5 +82,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Fact]
+        public async Task TestControlRender()
+        {
+            var response = await Client.GetAsync("http://localhost/Home/RenderControl");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("<div class=\"g-recaptcha\" data-sitekey=\"SiteKey\" data-callback=\"recaptchaValidated\"></div>", await response.Content.ReadAsStringAsync());
+        }
     }
 }
