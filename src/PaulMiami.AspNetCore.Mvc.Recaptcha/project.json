@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.2",
+  "version": "1.1.0",
   "title": "reCAPTCHA 2.0 for ASPNET Core ",
   "authors": [ "Paul Biccherai" ],
   "description": "This is a helper library for google reCAPTCHA 2.0\n\nGetting started guide:\nhttps://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started\n\nChange log:\nhttps://github.com/PaulMiami/reCAPTCHA/wiki/Change-log",
