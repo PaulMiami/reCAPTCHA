@@ -3,8 +3,11 @@
 //Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #endregion
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
+using Moq;
 using PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers;
 using System;
 using System.Collections.Generic;
@@ -28,9 +31,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             });
         }
 
-        private TagHelperOutput ProcessTagHelper(RecaptchaService service, TagHelperAttributeList attributes, Action<RecaptchaScriptTagHelper> config = null)
+        private TagHelperOutput ProcessTagHelper(RecaptchaService service, IHttpContextAccessor httpContextAccessor, TagHelperAttributeList attributes, Action<RecaptchaScriptTagHelper> config = null)
         {
-            var tagHelper = new RecaptchaScriptTagHelper(service);
+            var tagHelper = new RecaptchaScriptTagHelper(service, httpContextAccessor);
 
             config?.Invoke(tagHelper);
 
@@ -55,7 +58,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
         [Fact]
         public void MissingService()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new RecaptchaTagHelper(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new RecaptchaScriptTagHelper(null, new HttpContextAccessor()));
+        }
+
+        [Fact]
+        public void MissingContext()
+        {
+            var options = GetOptions();
+            var service = new RecaptchaService(options);
+
+            var ex = Assert.Throws<ArgumentNullException>(() => new RecaptchaScriptTagHelper(service, null));
         }
 
         [Fact]
@@ -67,8 +79,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             options.Value.JavaScriptUrl = src;
             options.Value.ValidationMessage = validationMessage;
             var service = new RecaptchaService(options);
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new Mock<IHttpContextAccessor>(MockBehavior.Strict);
+            httpContextAccessor
+                .Setup(a => a.HttpContext)
+                .Returns(httpContext)
+                .Verifiable();
 
-            var output = ProcessTagHelper(service, new TagHelperAttributeList());
+            var output = ProcessTagHelper(service, httpContextAccessor.Object, new TagHelperAttributeList());
 
             Assert.Equal("script", output.TagName);
             Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
@@ -79,6 +97,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             Assert.NotNull(output.Attributes["defer"]);
             Assert.Equal(string.Empty, output.Attributes["defer"].Value);
             Assert.Equal(string.Format(_script, "recaptchaValidated", string.Empty, validationMessage), output.PostElement.GetContent());
+
+            httpContextAccessor.Verify();
         }
 
         [Fact]
@@ -90,8 +110,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             options.Value.JavaScriptUrl = src;
             options.Value.ValidationMessage = validationMessage;
             var service = new RecaptchaService(options);
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new Mock<IHttpContextAccessor>(MockBehavior.Strict);
+            httpContextAccessor
+                .Setup(a => a.HttpContext)
+                .Returns(httpContext)
+                .Verifiable();
 
-            var output = ProcessTagHelper(service, new TagHelperAttributeList(), (th)=> th.JqueryValidation = false);
+            var output = ProcessTagHelper(service, httpContextAccessor.Object, new TagHelperAttributeList(), (th)=> th.JqueryValidation = false);
 
             Assert.Equal("script", output.TagName);
             Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
@@ -102,6 +128,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             Assert.NotNull(output.Attributes["defer"]);
             Assert.Equal(string.Empty, output.Attributes["defer"].Value);
             Assert.Equal(string.Empty, output.PostElement.GetContent());
+
+            httpContextAccessor.Verify();
         }
 
         [Fact]
@@ -114,8 +142,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             options.Value.JavaScriptUrl = src;
             options.Value.ValidationMessage = validationMessage;
             var service = new RecaptchaService(options);
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new Mock<IHttpContextAccessor>(MockBehavior.Strict);
+            httpContextAccessor
+                .Setup(a => a.HttpContext)
+                .Returns(httpContext)
+                .Verifiable();
 
-            var output = ProcessTagHelper(service, new TagHelperAttributeList(), (th)=>th.ValidationMessageElementId = validationMessageElementId);
+            var output = ProcessTagHelper(service, httpContextAccessor.Object, new TagHelperAttributeList(), (th)=>th.ValidationMessageElementId = validationMessageElementId);
 
             Assert.Equal("script", output.TagName);
             Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
@@ -126,6 +160,84 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             Assert.NotNull(output.Attributes["defer"]);
             Assert.Equal(string.Empty, output.Attributes["defer"].Value);
             Assert.Equal(string.Format(_script, "recaptchaValidated", validationMessageElementId, validationMessage), output.PostElement.GetContent());
+
+            httpContextAccessor.Verify();
+        }
+
+        [Fact]
+        public void LanguageCodeOptions()
+        {
+            var options = GetOptions();
+            var src = Guid.NewGuid().ToString();
+            var languageCode = Guid.NewGuid().ToString(); 
+            var validationMessage = Guid.NewGuid().ToString();
+            options.Value.JavaScriptUrl = src;
+            options.Value.ValidationMessage = validationMessage;
+            options.Value.LanguageCode = languageCode;
+            var service = new RecaptchaService(options);
+            var httpContext = new DefaultHttpContext();
+            var httpContextAccessor = new Mock<IHttpContextAccessor>(MockBehavior.Strict);
+            httpContextAccessor
+                .Setup(a => a.HttpContext)
+                .Returns(httpContext)
+                .Verifiable();
+
+            var output = ProcessTagHelper(service, httpContextAccessor.Object, new TagHelperAttributeList());
+
+            Assert.Equal("script", output.TagName);
+            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
+            Assert.NotNull(output.Attributes["src"]);
+            Assert.Equal($"{src}?hl={languageCode}", output.Attributes["src"].Value);
+            Assert.NotNull(output.Attributes["async"]);
+            Assert.Equal(string.Empty, output.Attributes["async"].Value);
+            Assert.NotNull(output.Attributes["defer"]);
+            Assert.Equal(string.Empty, output.Attributes["defer"].Value);
+            Assert.Equal(string.Format(_script, "recaptchaValidated", string.Empty, validationMessage), output.PostElement.GetContent());
+
+            httpContextAccessor.Verify();
+        }
+
+        [Theory]
+        [InlineData("en")]
+        [InlineData("en-US")]
+        [InlineData("fr")]
+        public void RequestCultureFeature(string culture)
+        {
+            var options = GetOptions();
+            var src = Guid.NewGuid().ToString();
+            var languageCode = Guid.NewGuid().ToString();
+            var validationMessage = Guid.NewGuid().ToString();
+            options.Value.JavaScriptUrl = src;
+            options.Value.ValidationMessage = validationMessage;
+            var service = new RecaptchaService(options);
+            var httpContext = new DefaultHttpContext();
+            var requestCultureFeature = new Mock<IRequestCultureFeature>(MockBehavior.Strict);
+            httpContext.Features.Set<IRequestCultureFeature>(requestCultureFeature.Object);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>(MockBehavior.Strict);
+            httpContextAccessor
+                .Setup(a => a.HttpContext)
+                .Returns(httpContext)
+                .Verifiable();
+
+            requestCultureFeature
+                .Setup(a => a.RequestCulture)
+                .Returns(new RequestCulture(culture))
+                .Verifiable();
+
+            var output = ProcessTagHelper(service, httpContextAccessor.Object, new TagHelperAttributeList());
+
+            Assert.Equal("script", output.TagName);
+            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
+            Assert.NotNull(output.Attributes["src"]);
+            Assert.Equal($"{src}?hl={culture}", output.Attributes["src"].Value);
+            Assert.NotNull(output.Attributes["async"]);
+            Assert.Equal(string.Empty, output.Attributes["async"].Value);
+            Assert.NotNull(output.Attributes["defer"]);
+            Assert.Equal(string.Empty, output.Attributes["defer"].Value);
+            Assert.Equal(string.Format(_script, "recaptchaValidated", string.Empty, validationMessage), output.PostElement.GetContent());
+
+            httpContextAccessor.Verify();
+            requestCultureFeature.Verify();
         }
     }
 }

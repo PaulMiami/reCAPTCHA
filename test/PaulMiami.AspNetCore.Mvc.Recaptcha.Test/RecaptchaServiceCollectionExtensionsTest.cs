@@ -3,6 +3,7 @@
 //Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #endregion
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Linq;
@@ -24,8 +25,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IRecaptchaValidationService)).Count() == 1);
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IRecaptchaConfigurationService)).Count() == 1);
             Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(ValidateRecaptchaFilter)).Count() == 1);
+            Assert.True(services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IHttpContextAccessor)).Count() == 1);
 
-            Assert.Equal(5, services.Count);
+            Assert.Equal(6, services.Count);
         }
     }
 }

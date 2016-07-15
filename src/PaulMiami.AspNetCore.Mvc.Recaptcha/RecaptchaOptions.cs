@@ -26,5 +26,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         public RecaptchaControlSettings ControlSettings { get; set; } = new RecaptchaControlSettings();
 
         public string ValidationMessage { get; set; }
+
+        public string LanguageCode { get; set; }
     }
 }

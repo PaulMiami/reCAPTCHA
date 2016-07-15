@@ -14,5 +14,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         string SiteKey { get; }
 
         RecaptchaControlSettings ControlSettings { get; }
+
+        string LanguageCode { get;  }
     }
 }

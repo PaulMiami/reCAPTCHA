@@ -3,6 +3,7 @@
 //Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #endregion
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -21,6 +22,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             services.TryAddSingleton<IRecaptchaValidationService>((sp) => sp.GetRequiredService<RecaptchaService>());
             services.TryAddSingleton<IRecaptchaConfigurationService>((sp) => sp.GetRequiredService<RecaptchaService>());
             services.TryAddSingleton<ValidateRecaptchaFilter>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         public static void AddRecaptcha(this IServiceCollection services, Action<RecaptchaOptions> configuration)

@@ -63,7 +63,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
                 return _validationMessage;
             }
         }
-     
+
+        public string LanguageCode
+        {
+            get
+            {
+                return _options.LanguageCode;
+            }
+        }
+
         public RecaptchaControlSettings ControlSettings
         {
             get
