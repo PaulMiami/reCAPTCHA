@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "reCAPTCHA 2.0 for ASPNET Core ",
   "authors": [ "Paul Biccherai" ],
   "description": "This is a helper library for google reCAPTCHA 2.0\n\nGetting started guide:\nhttps://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started\n\nChange log:\nhttps://github.com/PaulMiami/reCAPTCHA/wiki/Change-log",
@@ -18,9 +18,9 @@
   },
   "dependencies": {
     "Microsoft.AspNetCore.Localization": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.1",
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.1",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.1",
     "Microsoft.AspNetCore.Razor.Runtime": "1.0.0",
     "NETStandard.Library": "1.6.0",
     "Newtonsoft.Json": "9.0.1"

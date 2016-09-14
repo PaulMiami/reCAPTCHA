@@ -9,7 +9,7 @@
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "PaulMiami.AspNetCore.Mvc.Recaptcha": { "target": "project" },
-    "Microsoft.AspNetCore.Mvc": "1.0.0"
+    "Microsoft.AspNetCore.Mvc": "1.0.1"
   },
 
   "tools": {
