@@ -5,16 +5,18 @@
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
-    public interface IRecaptchaConfigurationService
-    {
-        string JavaScriptUrl { get; }
+	public interface IRecaptchaConfigurationService
+	{
+		bool Enabled { get; }
 
-        string ValidationMessage { get; }
+		string JavaScriptUrl { get; }
 
-        string SiteKey { get; }
+		string ValidationMessage { get; }
 
-        RecaptchaControlSettings ControlSettings { get; }
+		string SiteKey { get; }
 
-        string LanguageCode { get;  }
-    }
+		RecaptchaControlSettings ControlSettings { get; }
+
+		string LanguageCode { get; }
+	}
 }

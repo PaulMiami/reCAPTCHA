@@ -1,4 +1,4 @@
-﻿#region License
+﻿	#region License
 //Copyright(c) Paul Biccherai
 //Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #endregion
@@ -40,7 +40,13 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
+			if (!_service.Enabled)
+			{
+				output.TagName = null;
+				return;
+			}
+
+			output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.Add("class", "g-recaptcha");
             output.Attributes.Add("data-sitekey", _service.SiteKey);
