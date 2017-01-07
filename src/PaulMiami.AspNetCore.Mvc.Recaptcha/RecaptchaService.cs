@@ -40,7 +40,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             _backChannel.Timeout = _options.BackchannelTimeout;
         }
 
-        public string SiteKey
+		public bool Enabled
+		{
+			get
+			{
+				return this._options.Enabled;
+			}
+		}
+
+		public string SiteKey
         {
             get
             {
