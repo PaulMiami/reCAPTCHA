@@ -17,6 +17,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 
         public string SiteKey { get; set; }
 
+        public bool Enabled { get; set; }
+
         public string SecretKey { get; set; }
 
         public HttpMessageHandler BackchannelHttpHandler { get; set; }

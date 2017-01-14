@@ -7,6 +7,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
     public interface IRecaptchaConfigurationService
     {
+        bool Enabled { get; }
+
         string JavaScriptUrl { get; }
 
         string ValidationMessage { get; }
@@ -15,6 +17,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 
         RecaptchaControlSettings ControlSettings { get; }
 
-        string LanguageCode { get;  }
+        string LanguageCode { get; }
     }
 }

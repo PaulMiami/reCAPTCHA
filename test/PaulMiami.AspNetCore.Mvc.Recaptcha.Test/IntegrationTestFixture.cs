@@ -51,6 +51,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             {
                 config.SecretKey = "SecretKey";
                 config.SiteKey = "SiteKey";
+                config.Enabled = true;
                 config.BackchannelHttpHandler= new TestHttpMessageHandler
                 {
                     Sender = async req =>

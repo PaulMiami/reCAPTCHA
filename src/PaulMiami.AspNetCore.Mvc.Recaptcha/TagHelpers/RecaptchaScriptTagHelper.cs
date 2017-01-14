@@ -38,6 +38,12 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (!_service.Enabled)
+            {
+                output.TagName = null;
+                return;
+            }
+
             var requestCulture = _contextAccessor.HttpContext.Features.Get<IRequestCultureFeature>();
             var language = requestCulture?.RequestCulture?.UICulture?.Name ?? _service.LanguageCode;
 

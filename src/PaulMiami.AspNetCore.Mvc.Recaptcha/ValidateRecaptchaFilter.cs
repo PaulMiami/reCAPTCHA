@@ -15,13 +15,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
     {
         private IRecaptchaValidationService _service;
         private ILogger<ValidateRecaptchaFilter> _logger;
+        private readonly IRecaptchaConfigurationService _configurationService;
 
-        public ValidateRecaptchaFilter(IRecaptchaValidationService service, ILoggerFactory loggerFactory)
+        public ValidateRecaptchaFilter(IRecaptchaValidationService service, IRecaptchaConfigurationService configurationService, ILoggerFactory loggerFactory)
         {
             service.CheckArgumentNull(nameof(service));
+            service.CheckArgumentNull(nameof(configurationService));
             loggerFactory.CheckArgumentNull(nameof(loggerFactory));
 
             _service = service;
+            _configurationService = configurationService;
             _logger = loggerFactory.CreateLogger<ValidateRecaptchaFilter>();
         }
 
@@ -75,7 +78,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 
         protected  bool ShouldValidate(AuthorizationFilterContext context)
         {
-            return string.Equals("POST", context.HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase);
+            return _configurationService.Enabled && string.Equals("POST", context.HttpContext.Request.Method, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

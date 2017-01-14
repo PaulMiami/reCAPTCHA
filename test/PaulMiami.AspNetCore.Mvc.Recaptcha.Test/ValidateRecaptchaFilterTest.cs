@@ -37,7 +37,13 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(Task.FromResult(0))
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, NullLoggerFactory.Instance);
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -74,7 +80,13 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(Task.FromResult(0))
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, NullLoggerFactory.Instance);
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -113,10 +125,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Throws(new RecaptchaValidationException(errorMessage, false))
                 .Verifiable();
 
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
             var sink = new TestSink();
             var loggerFactory = new TestLoggerFactory(sink, enabled: true);
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -165,10 +183,17 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(validationMessage)
                 .Verifiable();
 
+
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
             var sink = new TestSink();
             var loggerFactory = new TestLoggerFactory(sink, enabled: true);
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -208,10 +233,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Setup(a => a.ValidateResponseAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .Verifiable();
 
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
             var sink = new TestSink();
             var loggerFactory = new TestLoggerFactory(sink, enabled: true);
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -255,7 +286,13 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(validationMessage)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, NullLoggerFactory.Instance);
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -282,6 +319,42 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
         }
 
+        [Fact]
+        public async Task DoNotValidateIfDisabled()
+        {
+            var recaptchaResponse = string.Empty;
+            var ipAddress = new IPAddress(new byte[] { 127, 0, 0, 1 });
+            var recaptchaService = new Mock<IRecaptchaValidationService>(MockBehavior.Strict);
+
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(false)
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Method = "POST";
+            httpContext.Request.HttpContext.Connection.RemoteIpAddress = ipAddress;
+            httpContext.Request.ContentType = "application/x-www-form-urlencoded";
+            httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>
+            {
+                { "g-recaptcha-response", recaptchaResponse }
+            });
+
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+
+            var context = new AuthorizationFilterContext(actionContext, new[] { filter });
+
+            await filter.OnAuthorizationAsync(context);
+
+            Assert.Null(context.Result);
+
+            configurationService.Verify();
+            recaptchaService.Verify();
+        }
+
         [Theory]
         [InlineData("GET")]
         [InlineData("PUT")]
@@ -297,7 +370,13 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(Task.FromResult(0))
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, NullLoggerFactory.Instance);
+            var configurationService = new Mock<IRecaptchaConfigurationService>(MockBehavior.Strict);
+            configurationService
+                .Setup(a => a.Enabled)
+                .Returns(true)
+                .Verifiable();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
 
             var actionContext = new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
             actionContext.HttpContext.Request.Method = httpMethod;

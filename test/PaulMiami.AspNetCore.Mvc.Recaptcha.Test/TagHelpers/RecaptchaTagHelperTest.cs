@@ -23,7 +23,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             return new OptionsWrapper<RecaptchaOptions>(new RecaptchaOptions
             {
                 SiteKey = _siteKey,
-                SecretKey = _secretKey
+                SecretKey = _secretKey,
+                Enabled = true
             });
         }
 
@@ -55,6 +56,20 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
         public void MissingService()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new RecaptchaTagHelper(null));
+        }
+
+        [Fact]
+        public void DoNotRenderIfDisabled()
+        {
+            var options = GetOptions();
+            options.Value.Enabled = false;
+            var service = new RecaptchaService(options);
+
+            var output = ProcessTagHelper(service, new TagHelperAttributeList());
+
+            Assert.Null(output.TagName);
+            Assert.False(output.IsContentModified);
+            Assert.Empty(output.Attributes);
         }
 
         [Fact]

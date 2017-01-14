@@ -24,7 +24,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             return new OptionsWrapper<RecaptchaOptions>(new RecaptchaOptions
             {
                 SiteKey = _siteKey,
-                SecretKey = _secretKey
+                SecretKey = _secretKey,
+                Enabled = true
             });
         }
 
@@ -93,6 +94,16 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             var service = new RecaptchaService(options);
 
             Assert.Equal(options.Value.SiteKey, service.SiteKey);
+        }
+
+        [Fact]
+        public void GetEnabledSuccess()
+        {
+            var options = GetOptions();
+
+            var service = new RecaptchaService(options);
+
+            Assert.Equal(options.Value.Enabled, service.Enabled);
         }
 
         [Fact]

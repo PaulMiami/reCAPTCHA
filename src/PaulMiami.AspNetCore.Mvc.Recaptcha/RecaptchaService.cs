@@ -5,7 +5,6 @@
 
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,7 +39,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             _backChannel.Timeout = _options.BackchannelTimeout;
         }
 
-        public string SiteKey
+        public bool Enabled
+        {
+            get
+            {
+                return _options.Enabled;
+            }
+        }
+
+		public string SiteKey
         {
             get
             {

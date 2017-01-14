@@ -40,6 +40,12 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (!_service.Enabled)
+            {
+                output.TagName = null;
+                return;
+            }
+
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.Add("class", "g-recaptcha");
