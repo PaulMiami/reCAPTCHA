@@ -17,7 +17,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         private RecaptchaOptions _options;
         private HttpClient _backChannel;
         private RecaptchaControlSettings _controlSettings;
-        private string _validationMessage;
 
         public RecaptchaService(IOptions<RecaptchaOptions> options)
         {
@@ -34,7 +33,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             _options.SecretKey.CheckMandatoryOption(nameof(_options.SecretKey));
 
             _controlSettings = _options.ControlSettings ?? new RecaptchaControlSettings();
-            _validationMessage = _options.ValidationMessage ?? Resources.Default_ValidationMessage;
             _backChannel = new HttpClient(_options.BackchannelHttpHandler ?? new HttpClientHandler());
             _backChannel.Timeout = _options.BackchannelTimeout;
         }
@@ -67,7 +65,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         {
             get
             {
-                return _validationMessage;
+                return _options.ValidationMessage ?? Resources.Default_ValidationMessage;
             }
         }
 

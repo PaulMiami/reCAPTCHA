@@ -185,5 +185,25 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.Equal("Unspecified remote server error.", ex.Message);
             Assert.False(ex.InvalidResponse);
         }
+        
+        [Fact]
+        public void ChangeSuccess()
+        {
+            var options = GetOptions();
+
+            var service = new RecaptchaService(options);
+
+            Assert.Equal(Resources.Default_ValidationMessage, service.ValidationMessage);
+
+            var newValidationMessage = Guid.NewGuid().ToString();
+
+            options.Value.ValidationMessage = newValidationMessage;
+
+            Assert.Equal(newValidationMessage, service.ValidationMessage);
+
+            options.Value.ValidationMessage = null;
+
+            Assert.Equal(Resources.Default_ValidationMessage, service.ValidationMessage);
+        }
     }
 }
