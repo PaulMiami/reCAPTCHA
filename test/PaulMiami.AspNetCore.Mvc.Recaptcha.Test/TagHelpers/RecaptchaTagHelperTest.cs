@@ -23,8 +23,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
             return new OptionsWrapper<RecaptchaOptions>(new RecaptchaOptions
             {
                 SiteKey = _siteKey,
-                SecretKey = _secretKey,
-                Enabled = true
+                SecretKey = _secretKey
             });
         }
 
