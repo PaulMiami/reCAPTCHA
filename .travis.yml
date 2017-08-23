@@ -3,16 +3,16 @@ sudo: required
 dist: trusty
 
 before_install:
-  - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list' 
-  - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
+  - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
   - sudo apt-get update
-  - sudo apt-get -y install dotnet-dev-1.0.0-preview2-003121
+  - sudo apt-get install dotnet-dev-1.0.4
   - dotnet --info
 
 install:
   - dotnet restore
-  - dotnet build src/PaulMiami.AspNetCore.Mvc.Recaptcha/project.json
+  - dotnet build src/PaulMiami.AspNetCore.Mvc.Recaptcha/PaulMiami.AspNetCore.Mvc.Recaptcha.csproj
 
 script:
-  - dotnet build sample/TestWebApp/project.json
-  - dotnet test test/PaulMiami.AspNetCore.Mvc.Recaptcha.Test/project.json
+  - dotnet build sample/TestWebApp/TestWebApp.csproj
+  - dotnet test test/PaulMiami.AspNetCore.Mvc.Recaptcha.Test/PaulMiami.AspNetCore.Mvc.Recaptcha.Test.csproj
