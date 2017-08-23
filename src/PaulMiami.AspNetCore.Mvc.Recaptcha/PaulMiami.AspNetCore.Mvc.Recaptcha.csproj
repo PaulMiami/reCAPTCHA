@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>This is a helper library for google reCAPTCHA 2.0
+
+Getting started guide:
+https://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started
+
+Change log:
+https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
+    <AssemblyTitle>reCAPTCHA 2.0 for ASPNET Core </AssemblyTitle>
+    <VersionPrefix>1.2.0</VersionPrefix>
+    <Authors>Paul Biccherai</Authors>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>PaulMiami.AspNetCore.Mvc.Recaptcha</AssemblyName>
+    <PackageId>PaulMiami.AspNetCore.Mvc.Recaptcha</PackageId>
+    <PackageTags>aspnetcore;recaptcha;captcha</PackageTags>
+    <PackageProjectUrl>https://github.com/PaulMiami/reCAPTCHA</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/PaulMiami/reCAPTCHA/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/PaulMiami/reCAPTCHA</RepositoryUrl>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="1.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>
