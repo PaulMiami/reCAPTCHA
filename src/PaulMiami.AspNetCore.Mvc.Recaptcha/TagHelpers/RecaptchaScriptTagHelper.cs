@@ -16,7 +16,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
         private IRecaptchaConfigurationService _service;
         private IHttpContextAccessor _contextAccessor;
 
-        private const string _scriptSnippet = "var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}');return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});";
+        private const string _scriptSnippet = "var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}', e.currentForm);if(t.length===0)return !0;return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});";
 
         private const string JqueryValidationAttributeName = "jquery-validation";
         private const string ValidationMessageElementIdAttributeName = "validation-message-element-id";

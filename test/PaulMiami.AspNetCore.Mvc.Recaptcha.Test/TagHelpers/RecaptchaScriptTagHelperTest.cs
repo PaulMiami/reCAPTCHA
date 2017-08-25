@@ -18,7 +18,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test.TagHelpers
 {
     public class RecaptchaScriptTagHelperTest
     {
-        private const string _script = "<script>var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}');return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});</script>";
+        private const string _script = "<script>var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}', e.currentForm);if(t.length===0)return !0;return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});</script>";
         private readonly string _siteKey = Guid.NewGuid().ToString();
         private readonly string _secretKey = Guid.NewGuid().ToString();
 
