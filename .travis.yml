@@ -11,7 +11,7 @@ before_install:
 
 install:
   - dotnet restore
-  - dotnet build src/PaulMiami.AspNetCore.Mvc.Recaptcha/PaulMiami.AspNetCore.Mvc.Recaptcha.csproj
+  - dotnet build -f netstandard1.6 src/PaulMiami.AspNetCore.Mvc.Recaptcha/PaulMiami.AspNetCore.Mvc.Recaptcha.csproj
 
 script:
   - dotnet build sample/TestWebApp/TestWebApp.csproj
