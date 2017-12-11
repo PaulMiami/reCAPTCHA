@@ -20,6 +20,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         private const string JqueryValidationAttributeName = "jquery-validation";
         private const string ValidationMessageElementIdAttributeName = "validation-message-element-id";
+        private const string ValidationMessageAttributeName = "validation-message";
 
         public RecaptchaScriptTagHelper(IRecaptchaConfigurationService service, IHttpContextAccessor contextAccessor)
         {
@@ -35,6 +36,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
         [HtmlAttributeName(ValidationMessageElementIdAttributeName)]
         public string ValidationMessageElementId { get; set; }
+
+        [HtmlAttributeName(ValidationMessageAttributeName)]
+        public string ValidationMessage { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -63,7 +67,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
                 var script = new TagBuilder("script");
                 script.TagRenderMode = TagRenderMode.Normal;
                 script.InnerHtml.AppendHtml(string.Format(_scriptSnippet,
-                    RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementId, _service.ValidationMessage));
+                    RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementId, ValidationMessage ?? _service.ValidationMessage));
 
                 output.PostElement.AppendHtml(script);
             }
