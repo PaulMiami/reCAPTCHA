@@ -98,6 +98,24 @@ namespace TestWebApp.Controllers
         }
 
         [HttpGet]
+        public IActionResult Invisible()
+        {
+            return View();
+        }
+
+        [ValidateRecaptcha]
+        [HttpPost]
+        public IActionResult Invisible(TestEmailNewsletterViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(ThankYou), new { name = viewModel.Name });
+            }
+
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult ThankYou(string name)
         {
             return View(nameof(ThankYou), name);
