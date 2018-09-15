@@ -87,7 +87,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 
         public async Task ValidateResponseAsync(string response, string remoteIp)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, RecaptchaDefaults.ResponseValidationEndpoint);
+            var request = new HttpRequestMessage(HttpMethod.Post, _options.ResponseValidationEndpoint);
             var paramaters = new Dictionary<string, string>();
             paramaters["secret"] = _options.SecretKey;
             paramaters["response"] = response;
