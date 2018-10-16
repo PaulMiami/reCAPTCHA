@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿#undef USE_NONCE
+
+using Joonasw.AspNetCore.SecurityHeaders;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,18 +11,12 @@ namespace TestWebApp
 {
     public class Startup
     {
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddUserSecrets();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
@@ -34,6 +30,12 @@ namespace TestWebApp
                 SecretKey = Configuration["Recaptcha:SecretKey"],
                 ValidationMessage = "Are you a robot?"
             });
+
+#if (USE_NONCE)
+            {
+                services.AddCsp(nonceByteAmount: 32);
+            }
+#endif
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +45,14 @@ namespace TestWebApp
             loggerFactory.AddDebug();
 
             app.UseDeveloperExceptionPage();
+
+#if (USE_NONCE)
+            app.UseCsp(csp =>
+            {
+                csp.AllowScripts.AddNonce();
+                csp.SetReportOnly();
+            });
+#endif
 
             app.UseStaticFiles();
 

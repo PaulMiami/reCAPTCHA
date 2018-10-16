@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging.Testing;
 using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Net;
 using System.Linq;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 {
@@ -131,8 +132,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var logger = new TestLogger();
+            var loggerFactory = new TestLoggerFactory<ValidateRecaptchaFilter>(logger);
 
             var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
@@ -153,9 +154,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             recaptchaService.Verify();
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. {errorMessage}", sink.Writes[0].State?.ToString());
+            Assert.Equal(0, logger.ScopeCount);
+            Assert.Single(logger.Log);
+            Assert.Equal($"Recaptcha validation failed. {errorMessage}", logger.Log[0]);
             var httpBadRequest = Assert.IsType<BadRequestResult>(context.Result);
             Assert.Equal(StatusCodes.Status400BadRequest, httpBadRequest.StatusCode);
             Assert.True(context.ModelState.IsValid);
@@ -190,8 +191,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var logger = new TestLogger();
+            var loggerFactory = new TestLoggerFactory<ValidateRecaptchaFilter>(logger);
 
             var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
@@ -212,14 +213,14 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             recaptchaService.Verify();
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. {errorMessage}", sink.Writes[0].State?.ToString());
+            Assert.Equal(0, logger.ScopeCount);
+            Assert.Single(logger.Log);
+            Assert.Equal($"Recaptcha validation failed. {errorMessage}", logger.Log[0]);
             Assert.Null(context.Result);
             Assert.False(context.ModelState.IsValid);
             Assert.NotEmpty(context.ModelState);
             Assert.NotNull(context.ModelState["g-recaptcha-response"]);
-            Assert.Equal(1, context.ModelState["g-recaptcha-response"].Errors.Count);
+            Assert.Single(context.ModelState["g-recaptcha-response"].Errors);
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
         }
 
@@ -239,8 +240,8 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var logger = new TestLogger();
+            var loggerFactory = new TestLoggerFactory<ValidateRecaptchaFilter>(logger);
 
             var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
 
@@ -256,9 +257,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             await filter.OnAuthorizationAsync(context);
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. The content type is 'Wrong content type', it should be form content.", sink.Writes[0].State?.ToString());
+            Assert.Equal(0, logger.ScopeCount);
+            Assert.Single(logger.Log);
+            Assert.Equal($"Recaptcha validation failed. The content type is 'Wrong content type', it should be form content.", logger.Log[0]);
             var httpBadRequest = Assert.IsType<BadRequestResult>(context.Result);
             Assert.Equal(StatusCodes.Status400BadRequest, httpBadRequest.StatusCode);
             Assert.True(context.ModelState.IsValid);
@@ -272,7 +273,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         {
             var recaptchaResponse = string.Empty;
             var ipAddress = new IPAddress(new byte[] { 127, 0, 0, 1 });
-            var errorMessage = Guid.NewGuid().ToString();
             var validationMessage = Guid.NewGuid().ToString();
 
             var recaptchaService = new Mock<IRecaptchaValidationService>(MockBehavior.Strict);
@@ -315,7 +315,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.False(context.ModelState.IsValid);
             Assert.NotEmpty(context.ModelState);
             Assert.NotNull(context.ModelState["g-recaptcha-response"]);
-            Assert.Equal(1, context.ModelState["g-recaptcha-response"].Errors.Count);
+            Assert.Single(context.ModelState["g-recaptcha-response"].Errors);
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
         }
 
