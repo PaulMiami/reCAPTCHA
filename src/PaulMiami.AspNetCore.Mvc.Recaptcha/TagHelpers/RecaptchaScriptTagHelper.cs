@@ -8,13 +8,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using Microsoft.AspNetCore.Localization;
+using Joonasw.AspNetCore.SecurityHeaders.Csp;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 {
     public class RecaptchaScriptTagHelper : TagHelper
     {
-        private IRecaptchaConfigurationService _service;
-        private IHttpContextAccessor _contextAccessor;
+        private readonly ICspNonceService _nonceService;
+        private readonly IRecaptchaConfigurationService _service;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         private const string _scriptSnippet = "var {0}=function(e){{var r=$('#{1}');r.length&&r.hide()}};$.validator.setDefaults({{submitHandler:function(){{var e=this,r=''!==grecaptcha.getResponse(),a='{2}',t=$('#{1}', e.currentForm);if(t.length===0)return !0;return a&&(r?t.length&&t.hide():(e.errorList.push({{message:a}}),$(e.currentForm).triggerHandler('invalid-form',[e]),t.length&&(t.html(a),t.show()))),r}}}});";
 
@@ -28,6 +30,15 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
 
             _service = service;
             _contextAccessor = contextAccessor;
+            var services = contextAccessor.HttpContext.RequestServices;
+            if (!(services is null))
+            {
+                var nonceService = services.GetService(typeof(ICspNonceService));
+                if (!(nonceService is null))
+                {
+                    _nonceService = nonceService as CspNonceService;
+                }
+            }
         }
 
         [HtmlAttributeName(JqueryValidationAttributeName)]
@@ -61,6 +72,12 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.TagHelpers
             if (JqueryValidation ?? true)
             {
                 var script = new TagBuilder("script");
+
+                if (!(_nonceService is null))
+                {
+                    script.Attributes.Add("nonce", _nonceService.GetNonce());
+                }
+
                 script.TagRenderMode = TagRenderMode.Normal;
                 script.InnerHtml.AppendHtml(string.Format(_scriptSnippet,
                     RecaptchaTagHelper.RecaptchaValidationJSCallBack, ValidationMessageElementId, _service.ValidationMessage));

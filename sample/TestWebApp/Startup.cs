@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿#undef USE_NONCE
+
+using Joonasw.AspNetCore.SecurityHeaders;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +30,12 @@ namespace TestWebApp
                 SecretKey = Configuration["Recaptcha:SecretKey"],
                 ValidationMessage = "Are you a robot?"
             });
+
+#if (USE_NONCE)
+            {
+                services.AddCsp(nonceByteAmount: 32);
+            }
+#endif
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +45,14 @@ namespace TestWebApp
             loggerFactory.AddDebug();
 
             app.UseDeveloperExceptionPage();
+
+#if (USE_NONCE)
+            app.UseCsp(csp =>
+            {
+                csp.AllowScripts.AddNonce();
+                csp.SetReportOnly();
+            });
+#endif
 
             app.UseStaticFiles();
 
