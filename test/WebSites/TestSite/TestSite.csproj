@@ -1,31 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>TestSite</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>TestSite</PackageId>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Update="wwwroot\**\*">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\PaulMiami.AspNetCore.Mvc.Recaptcha\PaulMiami.AspNetCore.Mvc.Recaptcha.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.3" />
-  </ItemGroup>
-
 </Project>
