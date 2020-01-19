@@ -10,23 +10,18 @@ namespace TestWebApp
     public class Startup
     {
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddUserSecrets();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllersWithViews();
 
             services.AddRecaptcha(new RecaptchaOptions
             {
@@ -35,22 +30,27 @@ namespace TestWebApp
                 ValidationMessage = "Are you a robot?"
             });
         }
-        
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            // loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            // loggerFactory.AddDebug();
 
             app.UseDeveloperExceptionPage();
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=TestEmailNewsletterSignup}/{action=Index}/{id?}");
+                    pattern: "{controller=TestEmailNewsletterSignup}/{action=Index}/{id?}");
             });
         }
     }

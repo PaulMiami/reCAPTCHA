@@ -237,3 +237,5 @@ _Pvt_Extensions
 # OpenCover and ReportGenerator
 coverage.xml
 Report/
+
+packages-microsoft-prod.deb

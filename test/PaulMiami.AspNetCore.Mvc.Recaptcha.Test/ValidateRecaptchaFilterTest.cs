@@ -2,7 +2,7 @@
 //Copyright(c) Paul Biccherai
 //Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #endregion
-
+/*
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging.Testing;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -393,3 +393,4 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
         }
     }
 }
+*/
