@@ -28,7 +28,7 @@ Try
 	# Either display or publish the results
 	If ($env:CI -eq 'True')
 	{
-		$command = (Get-ChildItem ($env:USERPROFILE + '\.nuget\packages\coveralls.io'))[0].FullName + '\tools\coveralls.net.exe' + ' --opencover "' + $outputFile + '" --full-sources'
+		$command = (Get-ChildItem ($env:USERPROFILE + '\.nuget\packages\coveralls.io'))[0].FullName + '\tools\coveralls.net.exe' + ' --cobertura "' + $outputFile + '" --full-sources'
 		Write-Output $command
 		iex $command
 	}
