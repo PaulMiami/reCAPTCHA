@@ -17,5 +17,5 @@ install:
 build: off
 test_script:
 - ps: dotnet build .\sample\TestWebApp\TestWebApp.csproj
-- ps: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../../testResults/coverage.xml
+- ps: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../../testResults/coverage.xml /p:Exclude="[PaulMiami.*Test]*" /p:Include="[PaulMiami*]*"  /p:ExcludeByAttribute="System.Diagnostics.DebuggerNonUserCodeAttribute"
 - ps: ./Coverage.ps1
