@@ -9,7 +9,7 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started
 Change log:
 https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <AssemblyTitle>reCAPTCHA 2.0 for ASPNET Core </AssemblyTitle>
-    <VersionPrefix>3.0.0</VersionPrefix>
+    <VersionPrefix>3.1.0-beta1</VersionPrefix>
     <Authors>Paul Biccherai</Authors>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
