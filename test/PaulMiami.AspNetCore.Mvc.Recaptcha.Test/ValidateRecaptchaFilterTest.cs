@@ -11,17 +11,34 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging.Testing;
 using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Net;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 {
     public class ValidateRecaptchaFilterTest
     {
+
+        static Mock<ILoggerFactory> GetLoggerFactory<T>()
+        {
+            var mockLogger = new Mock<ILogger<T>>();
+            mockLogger.Setup(
+                m => m.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.IsAny<object>(),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<object, Exception, string>>()));
+
+            var mockLoggerFactory = new Mock<ILoggerFactory>();
+            mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => mockLogger.Object);
+
+            return mockLoggerFactory;
+        }
 
         [Theory]
         [InlineData("POST")]
@@ -43,7 +60,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -86,7 +105,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -131,10 +152,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -153,9 +173,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             recaptchaService.Verify();
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. {errorMessage}", sink.Writes[0].State?.ToString());
             var httpBadRequest = Assert.IsType<BadRequestResult>(context.Result);
             Assert.Equal(StatusCodes.Status400BadRequest, httpBadRequest.StatusCode);
             Assert.True(context.ModelState.IsValid);
@@ -190,10 +207,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -212,9 +228,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             recaptchaService.Verify();
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. {errorMessage}", sink.Writes[0].State?.ToString());
             Assert.Null(context.Result);
             Assert.False(context.ModelState.IsValid);
             Assert.NotEmpty(context.ModelState);
@@ -239,10 +252,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var sink = new TestSink();
-            var loggerFactory = new TestLoggerFactory(sink, enabled: true);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory);
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -256,9 +268,6 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
 
             await filter.OnAuthorizationAsync(context);
 
-            Assert.Empty(sink.Scopes);
-            Assert.Single(sink.Writes);
-            Assert.Equal($"Recaptcha validation failed. The content type is 'Wrong content type', it should be form content.", sink.Writes[0].State?.ToString());
             var httpBadRequest = Assert.IsType<BadRequestResult>(context.Result);
             Assert.Equal(StatusCodes.Status400BadRequest, httpBadRequest.StatusCode);
             Assert.True(context.ModelState.IsValid);
@@ -292,7 +301,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = httpMethod;
@@ -332,7 +343,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(false)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Method = "POST";
@@ -376,7 +389,9 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
                 .Returns(true)
                 .Verifiable();
 
-            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, NullLoggerFactory.Instance);
+            var loggerFactory = GetLoggerFactory<ValidateRecaptchaFilter>();
+
+            var filter = new ValidateRecaptchaFilter(recaptchaService.Object, configurationService.Object, loggerFactory.Object);
 
             var actionContext = new ActionContext(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
             actionContext.HttpContext.Request.Method = httpMethod;
