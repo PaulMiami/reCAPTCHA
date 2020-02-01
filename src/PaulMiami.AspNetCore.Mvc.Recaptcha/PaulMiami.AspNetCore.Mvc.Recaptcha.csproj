@@ -9,7 +9,7 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started
 Change log:
 https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <AssemblyTitle>reCAPTCHA 2.0 for ASPNET Core </AssemblyTitle>
-    <VersionPrefix>1.2.1</VersionPrefix>
+    <VersionPrefix>1.2.2</VersionPrefix>
     <Authors>Paul Biccherai</Authors>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -32,11 +32,11 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="1.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="1.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="1.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
