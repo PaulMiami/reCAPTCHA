@@ -26,6 +26,24 @@ namespace TestWebApp.Controllers
         }
 
         [HttpGet]
+        public IActionResult Localization()
+        {
+            return View();
+        }
+
+        [ValidateRecaptcha]
+        [HttpPost]
+        public IActionResult Localization(TestEmailNewsletterViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(ThankYou), new { name = viewModel.Name });
+            }
+
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult DarkTheme()
         {
             return View();
