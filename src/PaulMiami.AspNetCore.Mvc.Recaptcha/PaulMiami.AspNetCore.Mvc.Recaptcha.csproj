@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>This is a helper library for google reCAPTCHA 2.0
+    <Description>Fix RecaptchaOptions.ResponseValidationEndpoint
+
+This is a helper library for google reCAPTCHA 2.0
 
 Getting started guide:
 https://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started
@@ -14,9 +16,9 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>PaulMiami.AspNetCore.Mvc.Recaptcha</AssemblyName>
-    <PackageId>PaulMiami.AspNetCore.Mvc.Recaptcha</PackageId>
+    <PackageId>NepPure.AspNetCore.Mvc.Recaptcha</PackageId>
     <PackageTags>aspnetcore;recaptcha;captcha</PackageTags>
-    <PackageProjectUrl>https://github.com/PaulMiami/reCAPTCHA</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/NepPure/reCAPTCHA</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/PaulMiami/reCAPTCHA/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/PaulMiami/reCAPTCHA</RepositoryUrl>
@@ -24,6 +26,8 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.3.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
