@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>This is a helper library for google reCAPTCHA 2.0
@@ -9,15 +9,15 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Getting-started
 Change log:
 https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <AssemblyTitle>reCAPTCHA 2.0 for ASPNET Core </AssemblyTitle>
-    <VersionPrefix>3.1.0-beta1</VersionPrefix>
+    <VersionPrefix>5.0.0-beta1</VersionPrefix>
     <Authors>Paul Biccherai</Authors>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>PaulMiami.AspNetCore.Mvc.Recaptcha</AssemblyName>
     <PackageId>PaulMiami.AspNetCore.Mvc.Recaptcha</PackageId>
     <PackageTags>aspnetcore;recaptcha;captcha</PackageTags>
     <PackageProjectUrl>https://github.com/PaulMiami/reCAPTCHA</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/PaulMiami/reCAPTCHA/master/LICENSE</PackageLicenseUrl>
+    <LicenseUrl>https://raw.githubusercontent.com/PaulMiami/reCAPTCHA/master/LICENSE</LicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/PaulMiami/reCAPTCHA</RepositoryUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -31,8 +31,7 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

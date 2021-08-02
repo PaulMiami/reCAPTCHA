@@ -216,7 +216,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.False(context.ModelState.IsValid);
             Assert.NotEmpty(context.ModelState);
             Assert.NotNull(context.ModelState["g-recaptcha-response"]);
-            Assert.Equal(1, context.ModelState["g-recaptcha-response"].Errors.Count);
+            Assert.Single(context.ModelState["g-recaptcha-response"].Errors);
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
         }
 
@@ -306,7 +306,7 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha.Test
             Assert.False(context.ModelState.IsValid);
             Assert.NotEmpty(context.ModelState);
             Assert.NotNull(context.ModelState["g-recaptcha-response"]);
-            Assert.Equal(1, context.ModelState["g-recaptcha-response"].Errors.Count);
+            Assert.Single(context.ModelState["g-recaptcha-response"].Errors);
             Assert.Equal(validationMessage, context.ModelState["g-recaptcha-response"].Errors.First().ErrorMessage);
         }
 

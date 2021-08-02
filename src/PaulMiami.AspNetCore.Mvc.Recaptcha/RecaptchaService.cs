@@ -4,19 +4,19 @@
 #endregion
 
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using System.Net.Http.Json;
 
 namespace PaulMiami.AspNetCore.Mvc.Recaptcha
 {
     public class RecaptchaService : IRecaptchaValidationService, IRecaptchaConfigurationService
     {
-        private RecaptchaOptions _options;
-        private HttpClient _backChannel;
-        private RecaptchaControlSettings _controlSettings;
+        private readonly RecaptchaOptions _options;
+        private readonly HttpClient _backChannel;
+        private readonly RecaptchaControlSettings _controlSettings;
 
         public RecaptchaService(IOptions<RecaptchaOptions> options)
         {
@@ -33,8 +33,10 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
             _options.SecretKey.CheckMandatoryOption(nameof(_options.SecretKey));
 
             _controlSettings = _options.ControlSettings ?? new RecaptchaControlSettings();
-            _backChannel = new HttpClient(_options.BackchannelHttpHandler ?? new HttpClientHandler());
-            _backChannel.Timeout = _options.BackchannelTimeout;
+            _backChannel = new HttpClient(_options.BackchannelHttpHandler ?? new HttpClientHandler())
+            {
+                Timeout = _options.BackchannelTimeout
+            };
         }
 
         public bool Enabled
@@ -88,27 +90,24 @@ namespace PaulMiami.AspNetCore.Mvc.Recaptcha
         public async Task ValidateResponseAsync(string response, string remoteIp)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, RecaptchaDefaults.ResponseValidationEndpoint);
-            var paramaters = new Dictionary<string, string>();
-            paramaters["secret"] = _options.SecretKey;
-            paramaters["response"] = response;
-            paramaters["remoteip"] = remoteIp;
+            var paramaters = new Dictionary<string, string>
+            {
+                ["secret"] = _options.SecretKey, ["response"] = response, ["remoteip"] = remoteIp
+            };
             request.Content = new FormUrlEncodedContent(paramaters);
 
             var resp = await _backChannel.SendAsync(request);
             resp.EnsureSuccessStatusCode();
 
-            var responseText = await resp.Content.ReadAsStringAsync();
-
-            var validationResponse = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RecaptchaValidationResponse>(responseText));
+            var validationResponse = await resp.Content.ReadFromJsonAsync<RecaptchaValidationResponse>();
 
             if (!validationResponse.Success)
             {
-                bool invalidResponse;
-                throw new RecaptchaValidationException(GetErrrorMessage(validationResponse, out invalidResponse), invalidResponse);
+                throw new RecaptchaValidationException(GetErrrorMessage(validationResponse, out var invalidResponse), invalidResponse);
             }
         }
 
-        private string GetErrrorMessage(RecaptchaValidationResponse validationResponse, out bool invalidResponse)
+        private static string GetErrrorMessage(RecaptchaValidationResponse validationResponse, out bool invalidResponse)
         {
             var errorList = new List<string>();
             invalidResponse = false;
