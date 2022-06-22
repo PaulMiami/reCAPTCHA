@@ -37,7 +37,7 @@ https://github.com/PaulMiami/reCAPTCHA/wiki/Change-log</Description>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="1.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
